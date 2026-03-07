@@ -1,7 +1,7 @@
 # 🇵🇸 Filastine — Site culturel sur la Palestine
 
 Projet fil rouge de la formation **Développer pour l'Humain et la Planète** —
-Accessibilité web & Éco-conception — par [Yosr Meddah](https://youtube.com/@YosrMeddah)
+Accessibilité web & Éco-conception — par [Yosr Meddah](https://youtube.com/playlist?list=PLJY8pFMYqReqMKaBP2oCBhlwSRz3PT3X1&si=4RKVk9OWqfppP93w)
 
 [![Accessibilité](https://img.shields.io/badge/Lighthouse%20A11y-96%2F100-2D6A4F?style=flat-square)](https://github.com/YosrMeddah/filastine)
 [![EcoIndex](https://img.shields.io/badge/EcoIndex-B-52956F?style=flat-square)](https://ecoindex.fr)
@@ -15,7 +15,7 @@ Accessibilité web & Éco-conception — par [Yosr Meddah](https://youtube.com/@
 **Développer pour l'Humain et la Planète** est une formation en français
 sur l'accessibilité web et l'éco-conception, disponible sur YouTube.
 
-📺 Playlist complète → [youtube.com/@YosrMeddah](https://youtube.com/@YosrMeddah)
+📺 Playlist complète → [youtube.com/@YosrMeddah](https://youtube.com/playlist?list=PLJY8pFMYqReqMKaBP2oCBhlwSRz3PT3X1&si=4RKVk9OWqfppP93w)
 
 ---
 
