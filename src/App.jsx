@@ -1,6 +1,6 @@
-//module 3
+//module 4
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 const villes = [
   {
     id: 1,
@@ -41,16 +41,28 @@ const villes = [
 ];
 
 function CarteVille({ ville, onClick }) {
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onClick(ville);
+    }
+  };
+
   return (
     <article
+      tabIndex={0}
+      role="button"
+      aria-label={`Voir les détails de ${ville.nom}`}
       onClick={() => onClick(ville)}
+      onKeyDown={handleKeyDown}
       style={{
         cursor: "pointer",
         border: "1px solid #eee",
         borderRadius: "8px",
         overflow: "hidden",
         background: "#fff",
-        boxShadow: "0 10px 40px rgba(0,0,0,0.2), 0 5px 20px rgba(0,0,0,0.1)",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+        transition: "transform 0.2s ease, box-shadow 0.2s ease",
       }}
     >
       <img
@@ -58,13 +70,15 @@ function CarteVille({ ville, onClick }) {
         style={{ width: "100%", height: "200px", objectFit: "cover" }}
       />
       <div style={{ padding: "16px" }}>
-        <h3 style={{ fontSize: "20px", fontWeight: "bold", display: "block" }}>
+        <h3
+          style={{ fontSize: "20px", fontWeight: "bold", margin: "0 0 4px 0" }}
+        >
           {ville.nom}
         </h3>
-        <p style={{ color: "#aaa", fontSize: "14px" }}>
+        <p style={{ color: "#aaa", fontSize: "14px", margin: "0 0 8px 0" }}>
           Population : {ville.population}
         </p>
-        <p style={{ color: "#bbb", marginTop: "8px", fontSize: "13px" }}>
+        <p style={{ color: "#bbb", fontSize: "13px", margin: 0 }}>
           {ville.description}
         </p>
       </div>
@@ -72,7 +86,26 @@ function CarteVille({ ville, onClick }) {
   );
 }
 
+
 function Modale({ ville, onClose }) {
+  const closeButtonRef = useRef(null);
+  useEffect(() => {
+    if (ville && closeButtonRef.current) {
+      closeButtonRef.current.focus();
+    }
+  }, [ville]);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Escape") {
+      onClose();
+      return;
+    }
+
+    if (e.key === "Tab") {
+      e.preventDefault();
+    }
+  };
+
   if (!ville) return null;
   return (
     <div
@@ -91,6 +124,10 @@ function Modale({ ville, onClose }) {
       onClick={onClose}
     >
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modale-titre"
+        onKeyDown={handleKeyDown}
         style={{
           background: "white",
           borderRadius: "12px",
@@ -101,38 +138,47 @@ function Modale({ ville, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         <img src={ville.image} style={{ width: "100%", borderRadius: "8px" }} />
-        <h2 style={{ marginTop: "16px" }}>{ville.nom}</h2>
+
+        <h2 id="modale-titre" style={{ marginTop: "16px" }}>
+          {ville.nom}
+        </h2>
+
         <p style={{ color: "#999" }}>{ville.description}</p>
+
         <button
+          ref={closeButtonRef}
           onClick={onClose}
+          aria-label="Fermer la fenêtre"
           style={{
             cursor: "pointer",
-            background: "#e00",
+            background: "#e63946",
             color: "white",
             padding: "8px 16px",
             borderRadius: "4px",
-            display: "inline-block",
+            border: "none",
             marginTop: "16px",
+            fontSize: "14px",
           }}
         >
-          X
+          Fermer
         </button>
       </div>
     </div>
   );
 }
 
+
 export default function App() {
   const [villeSelectionnee, setVilleSelectionnee] = useState(null);
-  const [compteurClics, setCompteurClics] = useState(0);
-
   const handleClick = (ville) => {
     setVilleSelectionnee(ville);
-    setCompteurClics(compteurClics + 1);
   };
 
   return (
     <div style={{ fontFamily: "Arial, sans-serif", minHeight: "100vh" }}>
+      <a href="#contenu-principal" className="skip-link">
+        Aller au contenu principal
+      </a>
       <header
         style={{
           background:
@@ -149,31 +195,41 @@ export default function App() {
       </header>
 
       <nav
-        style={{
-          background: "#222",
-          padding: "12px 20px",
-          display: "flex",
-          gap: "24px",
-        }}
+        aria-label="Navigation principale"
+        style={{ background: "#222", padding: "12px 20px" }}
       >
-        <ul>
+        <ul
+          style={{
+            listStyle: "none",
+            display: "flex",
+            gap: "24px",
+            margin: 0,
+            padding: 0,
+          }}
+        >
           <li>
-            <a href="/" style={{ color: "#aaa", cursor: "pointer" }}>
+            <a href="/" style={{ color: "#aaa", textDecoration: "none" }}>
               Accueil
             </a>
           </li>
           <li>
-            <a href="/villes" style={{ color: "#aaa", cursor: "pointer" }}>
+            <a href="/villes" style={{ color: "#aaa", textDecoration: "none" }}>
               Villes
             </a>
           </li>
           <li>
-            <a href="/histoire" style={{ color: "#aaa", cursor: "pointer" }}>
+            <a
+              href="/histoire"
+              style={{ color: "#aaa", textDecoration: "none" }}
+            >
               Histoire
             </a>
           </li>
           <li>
-            <a href="/contact" style={{ color: "#aaa", cursor: "pointer" }}>
+            <a
+              href="/contact"
+              style={{ color: "#aaa", textDecoration: "none" }}
+            >
               Contact
             </a>
           </li>
@@ -181,10 +237,13 @@ export default function App() {
       </nav>
 
       <main
+        id="contenu-principal"
+        tabIndex={-1}
         style={{ maxWidth: "1200px", margin: "0 auto", padding: "40px 20px" }}
       >
-        <section>
+        <section aria-labelledby="titre-villes">
           <h2
+            id="titre-villes"
             style={{
               fontSize: "28px",
               fontWeight: "bold",
@@ -210,96 +269,87 @@ export default function App() {
           </div>
         </section>
 
-        {/* Section chiffres */}
-        <section>
-          <div style={{ marginTop: "60px" }}>
-            <h2
+        <section aria-labelledby="titre-chiffres" style={{ marginTop: "60px" }}>
+          <h2
+            id="titre-chiffres"
+            style={{
+              fontSize: "24px",
+              fontWeight: "bold",
+              marginBottom: "24px",
+            }}
+          >
+            Quelques chiffres
+          </h2>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <caption
               style={{
-                fontSize: "24px",
+                textAlign: "left",
+                marginBottom: "8px",
                 fontWeight: "bold",
-                marginBottom: "24px",
+                captionSide: "top",
               }}
             >
-              Quelques chiffres
-            </h2>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <caption
-                style={{
-                  textAlign: "left",
-                  marginBottom: "8px",
-                  fontWeight: "bold",
-                  captionSide: "top",
-                }}
-              >
-                Données sur la Palestine
-              </caption>
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    style={{
-                      padding: "12px",
-                      borderBottom: "2px solid #ddd",
-                      textAlign: "left",
-                    }}
-                  >
-                    Indicateur
-                  </th>
-                  <th
-                    scope="col"
-                    style={{
-                      padding: "12px",
-                      borderBottom: "2px solid #ddd",
-                      textAlign: "left",
-                    }}
-                  >
-                    Valeur
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td
-                    style={{ padding: "12px", borderBottom: "1px solid #eee" }}
-                  >
-                    Superficie de la Palestine historique
-                  </td>
-                  <td
-                    style={{ padding: "12px", borderBottom: "1px solid #eee" }}
-                  >
-                    27 000 km²
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    style={{ padding: "12px", borderBottom: "1px solid #eee" }}
-                  >
-                    Réfugiés palestiniens
-                  </td>
-                  <td
-                    style={{ padding: "12px", borderBottom: "1px solid #eee" }}
-                  >
-                    7 millions+
-                  </td>
-                </tr>
-                <tr>
-                  <td
-                    style={{ padding: "12px", borderBottom: "1px solid #eee" }}
-                  >
-                    Année de la Nakba
-                  </td>
-                  <td
-                    style={{ padding: "12px", borderBottom: "1px solid #eee" }}
-                  >
-                    1948
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+              Données sur la Palestine
+            </caption>
+            <thead>
+              <tr>
+                <th
+                  scope="col"
+                  style={{
+                    padding: "12px",
+                    borderBottom: "2px solid #ddd",
+                    textAlign: "left",
+                  }}
+                >
+                  Indicateur
+                </th>
+                <th
+                  scope="col"
+                  style={{
+                    padding: "12px",
+                    borderBottom: "2px solid #ddd",
+                    textAlign: "left",
+                  }}
+                >
+                  Valeur
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+                  Superficie de la Palestine historique
+                </td>
+                <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+                  27 000 km²
+                </td>
+              </tr>
+              <tr>
+                <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+                  Réfugiés palestiniens
+                </td>
+                <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+                  7 millions+
+                </td>
+              </tr>
+              <tr>
+                <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+                  Année de la Nakba
+                </td>
+                <td style={{ padding: "12px", borderBottom: "1px solid #eee" }}>
+                  1948
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </section>
-        <section aria-labelledby="titre-contribuer" style={{marginTop:"6px"}}>
+
+        <section
+          aria-labelledby="titre-contribuer"
+          style={{ marginTop: "60px" }}
+        >
           <h2
+            id="titre-contribuer"
             style={{
               fontSize: "24px",
               fontWeight: "bold",
@@ -361,7 +411,6 @@ export default function App() {
               Envoyer
             </div>
           </div>
-       
         </section>
       </main>
 
