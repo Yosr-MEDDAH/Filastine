@@ -1,28 +1,152 @@
-/* module 4 */
+/*============================================
+  Module 5 
+  ============================================ */
 
-*, *::before, *::after {
+:root {
+  /* Fonds */
+  --color-bg: #ffffff;
+  --color-surface: #f8f7f4; 
+  --color-surface-hover: #f0ebe0;
+
+  /* Blanc — pour textes sur fonds sombres et images */
+  --color-white: #ffffff; 
+  --color-white-soft: #f0f0f0; 
+
+  /* Overlays */
+  --color-overlay: rgba(0, 0, 0, 0.7); 
+  --color-overlay-header: rgba(
+    0,
+    0,
+    0,
+    0.45
+  ); 
+
+  /* Textes */
+  --color-text-primary: #1a1a1a; 
+  --color-text-secondary: #555555; 
+  --color-text-muted: #6b6b6b; 
+
+  /* Accent */
+  --color-accent: #c1121f; 
+  --color-accent-hover: #a50f1a;
+  --color-accent-light: #fde8e9;
+
+  /* Navigation */
+  --color-nav-bg: #1a1a1a; 
+  --color-nav-text: #e8e0d0; 
+  --color-nav-text-hover: #ffffff;
+
+  /* Bordures */
+  --color-border: #d0ccc5; 
+  --color-border-focus: #c1121f; 
+
+  /* Tableaux */
+  --color-table-header-bg: #f0ebe0;
+  --color-table-border: #d0ccc5;
+
+  /* Footer */
+  --color-footer-bg: #1a1a1a; 
+  --color-footer-text: #a89880; 
+
+  /* Ombres */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.14);
+
+  /* Bordures arrondies */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Typographie */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.5rem; /* 24px */
+  --font-size-2xl: 1.75rem; /* 28px */
+  --font-size-3xl: 3rem; /* 48px */
+}
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Fonds */
+    --color-bg: #0f0f0f; 
+    --color-surface: #1a1a1a;
+    --color-surface-hover: #242424;
+
+    /* Overlays — légèrement plus forts sur fond sombre */
+    --color-overlay: rgba(0, 0, 0, 0.85);
+    --color-overlay-header: rgba(0, 0, 0, 0.55);
+
+    /* Textes */
+    --color-text-primary: #f0ebe0; 
+    --color-text-secondary: #a89880; 
+    --color-text-muted: #8a7e6e; 
+
+    /* Accent */
+    --color-accent: #e85d6a; 
+    --color-accent-hover: #f07080;
+    --color-accent-light: #2a1215;
+
+    /* Navigation */
+    --color-nav-bg: #111111;
+    --color-nav-text: #e8e0d0; 
+    --color-nav-text-hover: #ffffff;
+
+    /* Bordures */
+    --color-border: #3a3530;
+    --color-border-focus: #e85d6a; 
+
+    /* Tableaux */
+    --color-table-header-bg: #1f1f1f;
+    --color-table-border: #3a3530;
+
+    /* Footer */
+    --color-footer-bg: #080808;
+    --color-footer-text: #8a7e6e; 
+
+    /* Ombres */
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.5);
+  }
+}
+
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: system-ui, sans-serif;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+
 .skip-link {
   position: absolute;
-  top: -100%;         
+  top: -100%;
   left: 0;
   z-index: 9999;
-  background: #e63946;
-  color: white;
+  background: var(--color-accent);
+  color: var(--color-white);
   padding: 12px 24px;
-  font-size: 1rem;
+  font-size: var(--font-size-base);
   font-weight: bold;
   text-decoration: none;
-  border-radius: 0 0 8px 0;
+  border-radius: 0 0 var(--radius-md) 0;
   transition: top 0.2s ease;
 }
 
 .skip-link:focus {
-  top: 0;  
+  top: 0;
 }
 
 :focus:not(:focus-visible) {
@@ -30,31 +154,46 @@
 }
 
 :focus-visible {
-  outline: 3px solid #e63946;
+  outline: 3px solid var(--color-accent);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
 nav a:focus-visible {
-  outline: 3px solid #fff;
+  outline: 3px solid var(--color-white);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
-
 article[role="button"]:focus-visible {
-  outline: 3px solid #e63946;
+  outline: 3px solid var(--color-accent);
   outline-offset: 4px;
-  border-radius: 10px;
-  /* Légère élévation au focus pour feedback visuel */
+  border-radius: var(--radius-md);
   box-shadow: 0 0 0 6px rgba(230, 57, 70, 0.15);
 }
 
-
 dialog button:focus-visible,
 [role="dialog"] button:focus-visible {
-  outline: 3px solid #e63946;
+  outline: 3px solid var(--color-accent);
   outline-offset: 3px;
+}
+
+
+a {
+  color: var(--color-accent);
+}
+
+a:hover {
+  color: var(--color-accent-hover);
+}
+
+th {
+  background-color: var(--color-table-header-bg);
+  color: var(--color-text-primary);
+}
+
+td {
+  color: var(--color-text-primary);
 }
 
 
@@ -69,6 +208,10 @@ dialog button:focus-visible,
   }
 
   .skip-link {
+    transition: none;
+  }
+
+  body {
     transition: none;
   }
 }
