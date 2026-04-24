@@ -1,4 +1,20 @@
-// MODULE 5
+// MODULE 6
+
+import gazaJPG from "./assets/images/Damage_in_Gaza_Strip_during_the_October_2023_-_29.jpg";
+import jerusalemJPG from "./assets/images/Jerusalem-2013(2)-Aerial-Temple_Mount-(south_exposure).jpg";
+import haifaJPG from "./assets/images/Shrine_of_the_Báb_in_Haifa_6801-11.jpg";
+import naplouseJPG from "./assets/images/Palestine_-_Naplouse_et_le_Mont_Ebal.jpg";
+import palestinePNG from "./assets/images/State_of_Palestine.png";
+import gazaWebP from "./assets/images/Damage_in_Gaza_Strip_during_the_October_2023_-_29.webp";
+import jerusalemWebP from "./assets/images/Jerusalem-2013(2)-Aerial-Temple_Mount-(south_exposure).webp";
+import haifaWebP from "./assets/images/Shrine_of_the_Báb_in_Haifa_6801-11.webp";
+import naplouseWebP from "./assets/images/Palestine_-_Naplouse_et_le_Mont_Ebal.webp";
+import palestineWebP from "./assets/images/State_of_Palestine.webp";
+import gazaAvif from "./assets/images/Damage_in_Gaza_Strip_during_the_October_2023_-_29.avif";
+import jerusalemAvif from "./assets/images/Jerusalem-2013(2)-Aerial-Temple_Mount-(south_exposure).avif";
+import haifaAvif from "./assets/images/Shrine_of_the_Báb_in_Haifa_6801-11.avif";
+import naplouseAvif from "./assets/images/Palestine_-_Naplouse_et_le_Mont_Ebal.avif";
+import palestineAvif from "./assets/images/State_of_Palestine.avif";
 
 import { useState, useRef, useEffect } from "react";
 
@@ -27,10 +43,21 @@ function CarteVille({ ville, onClick }) {
         transition: "transform 0.2s ease, box-shadow 0.2s ease",
       }}
     >
-      <img
-        src={ville.image}
-        style={{ width: "100%", height: "200px", objectFit: "cover" }}
-      />
+
+      <picture>
+        <source srcSet={ville.imageAvif} type="image/avif" />
+        <source srcSet={ville.imageWebP} type="image/webp" />
+        <img
+          src={ville.imageJPG}
+          width={ville.imageWidth}
+          height={ville.imageHeight}
+          alt={ville.imageAlt}
+          loading="lazy"
+          decoding="async"
+          style={{ width: "100%", height: "200px", objectFit: "cover", display: "block" }}
+        />
+      </picture>
+
       <div style={{ padding: "16px" }}>
         <h3 style={{
           fontSize: "var(--font-size-lg)",
@@ -111,10 +138,20 @@ function Modale({ ville, onClose }) {
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        <img
-          src={ville.image}
-          style={{ width: "100%", borderRadius: "var(--radius-md)" }}
-        />
+
+        <picture>
+          <source srcSet={ville.imageAvif} type="image/avif" />
+          <source srcSet={ville.imageWebP} type="image/webp" />
+          <img
+            src={ville.imageJPG}
+            width={ville.imageWidth}
+            height={ville.imageHeight}
+            alt={ville.imageAlt}
+            loading="lazy"
+            decoding="async"
+            style={{ width: "100%", borderRadius: "var(--radius-md)", display: "block" }}
+          />
+        </picture>
 
         <h2 id="modale-titre" style={{
           marginTop: "16px",
@@ -161,28 +198,48 @@ const villes = [
     nom: "Gaza",
     description: "Une ville côtière sur la mer Méditerranée, l'une des plus anciennes villes du monde.",
     population: "2 000 000+",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Damage_in_Gaza_Strip_during_the_October_2023_-_29.jpg/1280px-Damage_in_Gaza_Strip_during_the_October_2023_-_29.jpg",
+    imageAvif: gazaAvif,
+    imageWebP: gazaWebP,
+    imageJPG: gazaJPG,
+    imageWidth:600,
+    imageHeight:400,
+    imageAlt:"Vue de la ville de Gaza et de la mer Méditerranée",
   },
   {
     id: 2,
     nom: "Al-Quds (Jérusalem)",
     description: "La ville sainte, au cœur de l'histoire et de la culture palestinienne.",
     population: "950 000+",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Jerusalem-2013%282%29-Aerial-Temple_Mount-%28south_exposure%29.jpg/1280px-Jerusalem-2013%282%29-Aerial-Temple_Mount-%28south_exposure%29.jpg",
+    imageAvif: jerusalemAvif,
+    imageWebP: jerusalemWebP,
+    imageJPG: jerusalemJPG,
+    imageWidth:600,
+    imageHeight:400,
+    imageAlt:"La mosquée Al-Aqsa et le Dôme du Rocher à Jérusalem",
   },
   {
     id: 3,
     nom: "Haïfa",
     description: "Ville portuaire historique au nord de la Palestine historique.",
     population: "300 000+",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Shrine_of_the_B%C3%A1b_in_Haifa_6801-11.jpg/1920px-Shrine_of_the_B%C3%A1b_in_Haifa_6801-11.jpg",
+    imageAvif: haifaAvif,
+    imageWebP: haifaWebP,
+    imageJPG: haifaJPG,
+    imageWidth:600,
+    imageHeight:400,
+    imageAlt:"Vue panoramique de la ville de Haïfa zt du Mont Carmel",
   },
   {
     id: 4,
     nom: "Naplouse",
     description: "Ville de la région de Cisjordanie, connue pour sa culture et son histoire.",
     population: "180 000+",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Palestine_-_Naplouse_et_le_Mont_Ebal.jpg/1920px-Palestine_-_Naplouse_et_le_Mont_Ebal.jpg",
+    imageAvif: naplouseAvif,
+    imageWebP: naplouseWebP,
+    imageJPG: naplouseJPG,
+    imageWidth:600,
+    imageHeight:400,
+    imageAlt:"Vue du centre-ville de Naplouse et du Mont Ebal",
   },
 ];
 
@@ -202,20 +259,44 @@ export default function App() {
 
       <header
         style={{
-          background: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/State_of_Palestine.png/1280px-State_of_Palestine.png?_=20241120112127') center/cover",
           padding: "80px 20px",
           textAlign: "center",
           position: "relative",
+          overflow: "hidden",
         }}
       >
+        <picture>
+          <source srcSet={palestineAvif} type="image/avif" />
+          <source srcSet={palestineWebP} type="image/webp" />
+          <img
+            src={palestinePNG}
+            width={1280}
+            height={720}  
+            alt="Drapeau de la Palestine"  
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              zIndex: 0,
+            }}
+          />
 
+        </picture>   
+
+        {/* overlay */}
         <div style={{
           position: "absolute",
           inset: 0,
           background: "var(--color-overlay-header)",
+          zIndex: 1,
         }} aria-hidden="true" />
 
-        <div style={{ position: "relative", zIndex: 1 }}>
+        <div style={{ position: "relative", zIndex: 2}}>
           <h1 style={{
             fontSize: "var(--font-size-3xl)",
             fontWeight: "900",
